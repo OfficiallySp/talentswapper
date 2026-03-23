@@ -1,8 +1,8 @@
 --[[
-  TalentSwap — wrappers for C_ClassTalents / C_Traits.
+  TalentSwapper — wrappers for C_ClassTalents / C_Traits.
 ]]
 
-local API = TalentSwap.TalentAPI
+local API = TalentSwapper.TalentAPI
 
 function API.GetCurrentSpecID()
   local specIndex = GetSpecialization()

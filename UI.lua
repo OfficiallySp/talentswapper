@@ -1,11 +1,11 @@
 --[[
-  TalentSwap — config panel and slash commands.
+  TalentSwapper — config panel and slash commands.
 ]]
 
-local UI = TalentSwap.UI
-local API = TalentSwap.TalentAPI
-local SM = TalentSwap.SlotManager
-local Feedback = TalentSwap.Feedback
+local UI = TalentSwapper.UI
+local API = TalentSwapper.TalentAPI
+local SM = TalentSwapper.SlotManager
+local Feedback = TalentSwapper.Feedback
 
 local NOT_BOUND = "(not bound)"
 
@@ -15,7 +15,7 @@ local activeText
 local rowControls
 
 local function getKeybindDisplay(slotIndex)
-  local bindName = "TALENTSWAP_SLOT" .. tostring(slotIndex)
+  local bindName = "TALENTSWAPPER_SLOT" .. tostring(slotIndex)
   local key = GetBindingKey(bindName)
   if not key or key == "" then
     return NOT_BOUND
@@ -54,7 +54,7 @@ local function buildDropdownInit(slotIndex)
     info.notCheckable = true
     info.func = function()
       SM:ClearSlot(slotIndex, API.GetCurrentSpecID())
-      setDropdownToSlot(_G["TalentSwapDropDown" .. slotIndex], slotIndex)
+      setDropdownToSlot(_G["TalentSwapperDropDown" .. slotIndex], slotIndex)
     end
     UIDropDownMenu_AddButton(info, level)
 
@@ -65,7 +65,7 @@ local function buildDropdownInit(slotIndex)
       info.notCheckable = true
       info.func = function()
         SM:SetSlot(slotIndex, lo.configID, API.GetCurrentSpecID())
-        setDropdownToSlot(_G["TalentSwapDropDown" .. slotIndex], slotIndex)
+        setDropdownToSlot(_G["TalentSwapperDropDown" .. slotIndex], slotIndex)
       end
       UIDropDownMenu_AddButton(info, level)
     end
@@ -94,7 +94,7 @@ function UI:RefreshIfVisible()
 end
 
 local function createMainFrame()
-  local f = CreateFrame("Frame", "TalentSwapConfigFrame", UIParent, "BackdropTemplate")
+  local f = CreateFrame("Frame", "TalentSwapperConfigFrame", UIParent, "BackdropTemplate")
   f:SetSize(520, 420)
   f:SetPoint("CENTER")
   f:SetFrameStrata("DIALOG")
@@ -118,7 +118,7 @@ local function createMainFrame()
 
   local title = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
   title:SetPoint("TOP", 0, -16)
-  title:SetText("TalentSwap")
+  title:SetText("TalentSwapper")
 
   specText = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
   specText:SetPoint("TOPLEFT", 24, -44)
@@ -134,7 +134,7 @@ local function createMainFrame()
   hint:SetPoint("TOPLEFT", activeText, "BOTTOMLEFT", 0, -8)
   hint:SetWidth(480)
   hint:SetJustifyH("LEFT")
-  hint:SetText("Assign a saved talent loadout to each slot, then bind keys in Esc → Options → Key Bindings → Addons → TalentSwap.")
+  hint:SetText("Assign a saved talent loadout to each slot, then bind keys in Esc → Options → Key Bindings → Addons → TalentSwapper.")
 
   rowControls = {}
   local y = -110
@@ -148,7 +148,7 @@ local function createMainFrame()
     label:SetPoint("LEFT", 0, 0)
     label:SetText("Slot " .. slotIndex)
 
-    local dd = CreateFrame("Frame", "TalentSwapDropDown" .. slotIndex, row, "UIDropDownMenuTemplate")
+    local dd = CreateFrame("Frame", "TalentSwapperDropDown" .. slotIndex, row, "UIDropDownMenuTemplate")
     dd:SetPoint("LEFT", label, "RIGHT", 12, -2)
     UIDropDownMenu_SetWidth(dd, 220)
     UIDropDownMenu_Initialize(dd, buildDropdownInit(slotIndex))
@@ -204,16 +204,17 @@ function UI:ToggleConfig()
 end
 
 function UI:OnPlayerLogin()
-  SLASH_TALENTSWAP1 = "/talentswap"
-  SLASH_TALENTSWAP2 = "/ts"
-  SlashCmdList["TALENTSWAP"] = function(msg)
+  SLASH_TALENTSWAPPER1 = "/talentswap"
+  SLASH_TALENTSWAPPER2 = "/ts"
+  SLASH_TALENTSWAPPER3 = "/talentswapper"
+  SlashCmdList["TALENTSWAPPER"] = function(msg)
     UI:HandleSlash(strtrim(msg or ""))
   end
 end
 
 local function printList()
   local loadouts = API.GetLoadouts()
-  Feedback.PrintAlways("|cff00ccffTalentSwap|r — loadouts for this spec:")
+  Feedback.PrintAlways("|cff00ccffTalentSwapper|r — loadouts for this spec:")
   if #loadouts == 0 then
     Feedback.PrintAlways("  (none — save loadouts in the talent UI first)")
   else
@@ -255,11 +256,11 @@ function UI:HandleSlash(msg)
   if cmd == "clear" then
     local slot = tonumber(rest)
     if not slot or slot < 1 or slot > 10 then
-      Feedback.PrintAlways("|cffff4444TalentSwap:|r Usage: /ts clear <1-10>")
+      Feedback.PrintAlways("|cffff4444TalentSwapper:|r Usage: /ts clear <1-10>")
       return
     end
     SM:ClearSlot(slot, API.GetCurrentSpecID())
-    Feedback.PrintAlways("|cff00ff00TalentSwap:|r Cleared slot " .. tostring(slot) .. ".")
+    Feedback.PrintAlways("|cff00ff00TalentSwapper:|r Cleared slot " .. tostring(slot) .. ".")
     self:RefreshIfVisible()
     return
   end
@@ -268,17 +269,17 @@ function UI:HandleSlash(msg)
     local slot, name = rest:match("^(%d+)%s+(.+)$")
     slot = tonumber(slot)
     if not slot or slot < 1 or slot > 10 or not name or name == "" then
-      Feedback.PrintAlways("|cffff4444TalentSwap:|r Usage: /ts assign <1-10> <loadout name>")
+      Feedback.PrintAlways("|cffff4444TalentSwapper:|r Usage: /ts assign <1-10> <loadout name>")
       return
     end
     name = strtrim(name)
     local configID, resolved = API.FindLoadoutByName(name)
     if not configID then
-      Feedback.PrintAlways("|cffff4444TalentSwap:|r No loadout named \"" .. name .. "\".")
+      Feedback.PrintAlways("|cffff4444TalentSwapper:|r No loadout named \"" .. name .. "\".")
       return
     end
     SM:SetSlot(slot, configID, API.GetCurrentSpecID())
-    Feedback.PrintAlways("|cff00ff00TalentSwap:|r Slot " .. tostring(slot) .. " → |cffffffff" .. resolved .. "|r")
+    Feedback.PrintAlways("|cff00ff00TalentSwapper:|r Slot " .. tostring(slot) .. " → |cffffffff" .. resolved .. "|r")
     self:RefreshIfVisible()
     return
   end
@@ -286,7 +287,7 @@ function UI:HandleSlash(msg)
   if cmd == "swap" then
     local token = strtrim(rest)
     if token == "" then
-      Feedback.PrintAlways("|cffff4444TalentSwap:|r Usage: /ts swap <1-10 or loadout name>")
+      Feedback.PrintAlways("|cffff4444TalentSwapper:|r Usage: /ts swap <1-10 or loadout name>")
       return
     end
     local asNum = tonumber(token)
@@ -299,9 +300,9 @@ function UI:HandleSlash(msg)
       SM:ExecuteSwapToConfig(configID, resolved)
       return
     end
-    Feedback.PrintAlways("|cffff4444TalentSwap:|r No slot or loadout matched \"" .. token .. "\".")
+    Feedback.PrintAlways("|cffff4444TalentSwapper:|r No slot or loadout matched \"" .. token .. "\".")
     return
   end
 
-  Feedback.PrintAlways("|cffff4444TalentSwap:|r Unknown command. Try |cffffffff/ts help|r")
+  Feedback.PrintAlways("|cffff4444TalentSwapper:|r Unknown command. Try |cffffffff/ts help|r")
 end

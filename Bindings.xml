@@ -1,17 +1,17 @@
 <Bindings>
-    <Binding name="TALENTSWAP_SLOT1" header="TALENTSWAP" category="ADDONS">
-        TalentSwap_Slot1();
+    <Binding name="TALENTSWAPPER_SLOT1" header="TALENTSWAPPER" category="ADDONS">
+        TalentSwapper_Slot1();
     </Binding>
-    <Binding name="TALENTSWAP_SLOT2" category="ADDONS">
-        TalentSwap_Slot2();
+    <Binding name="TALENTSWAPPER_SLOT2" category="ADDONS">
+        TalentSwapper_Slot2();
     </Binding>
-    <Binding name="TALENTSWAP_SLOT3" category="ADDONS">
-        TalentSwap_Slot3();
+    <Binding name="TALENTSWAPPER_SLOT3" category="ADDONS">
+        TalentSwapper_Slot3();
     </Binding>
-    <Binding name="TALENTSWAP_SLOT4" category="ADDONS">
-        TalentSwap_Slot4();
+    <Binding name="TALENTSWAPPER_SLOT4" category="ADDONS">
+        TalentSwapper_Slot4();
     </Binding>
-    <Binding name="TALENTSWAP_SLOT5" category="ADDONS">
-        TalentSwap_Slot5();
+    <Binding name="TALENTSWAPPER_SLOT5" category="ADDONS">
+        TalentSwapper_Slot5();
     </Binding>
 </Bindings>

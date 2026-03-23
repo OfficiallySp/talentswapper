@@ -1,12 +1,13 @@
 ## Interface: 120001
-## Title: TalentSwap
+## Title: TalentSwapper
 ## Notes: Keybinds and quick swap for talent loadouts
-## Author: TalentSwap
+## Author: TalentSwapper
 ## Version: 1.0.0
-## SavedVariablesPerCharacter: TalentSwapDB
+## SavedVariablesPerCharacter: TalentSwapperDB
 
 Core.lua
 TalentAPI.lua
 Feedback.lua
 SlotManager.lua
 UI.lua
+Bindings.xml

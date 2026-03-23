@@ -1,13 +1,13 @@
 --[[
-  TalentSwap — slot ↔ loadout mapping and keybind handlers.
+  TalentSwapper — slot ↔ loadout mapping and keybind handlers.
 ]]
 
-local SM = TalentSwap.SlotManager
-local API = TalentSwap.TalentAPI
-local Feedback = TalentSwap.Feedback
+local SM = TalentSwapper.SlotManager
+local API = TalentSwapper.TalentAPI
+local Feedback = TalentSwapper.Feedback
 
 local function db()
-  return TalentSwap:GetDB()
+  return TalentSwapper:GetDB()
 end
 
 function SM:EnsureSpecMap(specID)
@@ -89,7 +89,7 @@ function SM:ExecuteSwapToConfig(configID, displayName)
   end
 
   if result == R.LoadInProgress then
-    TalentSwap:SetPendingSwap(configID, name)
+    TalentSwapper:SetPendingSwap(configID, name)
     Feedback.OnSwapCastStarted(name)
     return
   end
@@ -99,7 +99,7 @@ function SM:ExecuteSwapToConfig(configID, displayName)
     return
   end
 
-  Feedback.PrintOptional("|cffff8800TalentSwap:|r Unexpected load result; check talent UI.")
+  Feedback.PrintOptional("|cffff8800TalentSwapper:|r Unexpected load result; check talent UI.")
 end
 
 function SM:OnSlotKeybind(slotIndex)
@@ -122,13 +122,13 @@ local function makeSlotHandler(index)
   end
 end
 
-TalentSwap_Slot1 = makeSlotHandler(1)
-TalentSwap_Slot2 = makeSlotHandler(2)
-TalentSwap_Slot3 = makeSlotHandler(3)
-TalentSwap_Slot4 = makeSlotHandler(4)
-TalentSwap_Slot5 = makeSlotHandler(5)
-TalentSwap_Slot6 = makeSlotHandler(6)
-TalentSwap_Slot7 = makeSlotHandler(7)
-TalentSwap_Slot8 = makeSlotHandler(8)
-TalentSwap_Slot9 = makeSlotHandler(9)
-TalentSwap_Slot10 = makeSlotHandler(10)
+TalentSwapper_Slot1 = makeSlotHandler(1)
+TalentSwapper_Slot2 = makeSlotHandler(2)
+TalentSwapper_Slot3 = makeSlotHandler(3)
+TalentSwapper_Slot4 = makeSlotHandler(4)
+TalentSwapper_Slot5 = makeSlotHandler(5)
+TalentSwapper_Slot6 = makeSlotHandler(6)
+TalentSwapper_Slot7 = makeSlotHandler(7)
+TalentSwapper_Slot8 = makeSlotHandler(8)
+TalentSwapper_Slot9 = makeSlotHandler(9)
+TalentSwapper_Slot10 = makeSlotHandler(10)

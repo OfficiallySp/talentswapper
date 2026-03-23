@@ -1,26 +1,26 @@
 --[[
-  TalentSwap — core: namespace, saved variables, event frame, binding labels.
+  TalentSwapper — core: namespace, saved variables, event frame, binding labels.
 ]]
 
-TalentSwap = TalentSwap or {}
-TalentSwap.addonName = "TalentSwap"
-TalentSwap.version = "1.0.0"
+TalentSwapper = TalentSwapper or {}
+TalentSwapper.addonName = "TalentSwapper"
+TalentSwapper.version = "1.0.0"
 
-TalentSwap.TalentAPI = TalentSwap.TalentAPI or {}
-TalentSwap.Feedback = TalentSwap.Feedback or {}
-TalentSwap.SlotManager = TalentSwap.SlotManager or {}
-TalentSwap.UI = TalentSwap.UI or {}
+TalentSwapper.TalentAPI = TalentSwapper.TalentAPI or {}
+TalentSwapper.Feedback = TalentSwapper.Feedback or {}
+TalentSwapper.SlotManager = TalentSwapper.SlotManager or {}
+TalentSwapper.UI = TalentSwapper.UI or {}
 
 --- Key binding UI strings (must exist before Bindings.xml resolves)
-BINDING_HEADER_TALENTSWAP = "TalentSwap"
-BINDING_NAME_TALENTSWAP_SLOT1 = "Talent loadout slot 1"
-BINDING_NAME_TALENTSWAP_SLOT2 = "Talent loadout slot 2"
-BINDING_NAME_TALENTSWAP_SLOT3 = "Talent loadout slot 3"
-BINDING_NAME_TALENTSWAP_SLOT4 = "Talent loadout slot 4"
-BINDING_NAME_TALENTSWAP_SLOT5 = "Talent loadout slot 5"
+BINDING_HEADER_TALENTSWAPPER = "TalentSwapper"
+BINDING_NAME_TALENTSWAPPER_SLOT1 = "Talent loadout slot 1"
+BINDING_NAME_TALENTSWAPPER_SLOT2 = "Talent loadout slot 2"
+BINDING_NAME_TALENTSWAPPER_SLOT3 = "Talent loadout slot 3"
+BINDING_NAME_TALENTSWAPPER_SLOT4 = "Talent loadout slot 4"
+BINDING_NAME_TALENTSWAPPER_SLOT5 = "Talent loadout slot 5"
 
 --- Pending swap after LoadInProgress (cast bar)
-TalentSwap.pendingSwap = nil
+TalentSwapper.pendingSwap = nil
 
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("ADDON_LOADED")
@@ -37,8 +37,8 @@ local function defaultDB()
   }
 end
 
-function TalentSwap:GetDB()
-  return TalentSwapDB
+function TalentSwapper:GetDB()
+  return TalentSwapperDB
 end
 
 local function mergeDefaults(db)
@@ -57,57 +57,63 @@ local function mergeDefaults(db)
   end
 end
 
---- ADDON_LOADED passes the AddOns folder name; casing may differ (e.g. talentswap vs TalentSwap).
+--- ADDON_LOADED passes the AddOns folder name; casing may differ (e.g. talentswapper vs TalentSwapper).
 local function addonFolderMatches(addonName)
   if type(addonName) ~= "string" then
     return false
   end
-  return string.lower(addonName) == string.lower(TalentSwap.addonName)
+  return string.lower(addonName) == string.lower(TalentSwapper.addonName)
 end
 
 local function onAddonLoaded(addonName)
   if not addonFolderMatches(addonName) then
     return
   end
-  TalentSwapDB = TalentSwapDB or defaultDB()
-  mergeDefaults(TalentSwapDB)
+  if not TalentSwapperDB and TalentSwapDB and type(TalentSwapDB) == "table" then
+    TalentSwapperDB = CopyTable(TalentSwapDB)
+  end
+  TalentSwapperDB = TalentSwapperDB or defaultDB()
+  mergeDefaults(TalentSwapperDB)
 end
 
 local function onPlayerLogin()
   -- Ensure DB exists if ADDON_LOADED name check failed or load order differed
-  TalentSwapDB = TalentSwapDB or defaultDB()
-  mergeDefaults(TalentSwapDB)
-  if TalentSwap.UI and TalentSwap.UI.OnPlayerLogin then
-    TalentSwap.UI:OnPlayerLogin()
+  if not TalentSwapperDB and TalentSwapDB and type(TalentSwapDB) == "table" then
+    TalentSwapperDB = CopyTable(TalentSwapDB)
+  end
+  TalentSwapperDB = TalentSwapperDB or defaultDB()
+  mergeDefaults(TalentSwapperDB)
+  if TalentSwapper.UI and TalentSwapper.UI.OnPlayerLogin then
+    TalentSwapper.UI:OnPlayerLogin()
   end
 end
 
 local function onTraitConfigUpdated()
-  if not TalentSwap.pendingSwap then
+  if not TalentSwapper.pendingSwap then
     return
   end
-  local pending = TalentSwap.pendingSwap
-  TalentSwap.pendingSwap = nil
-  local currentId = TalentSwap.TalentAPI.GetCurrentLoadoutConfigID()
+  local pending = TalentSwapper.pendingSwap
+  TalentSwapper.pendingSwap = nil
+  local currentId = TalentSwapper.TalentAPI.GetCurrentLoadoutConfigID()
   if currentId == pending.configID then
-    TalentSwap.Feedback.OnSwapSuccess(pending.name, "cast")
+    TalentSwapper.Feedback.OnSwapSuccess(pending.name, "cast")
   else
-    TalentSwap.Feedback.PrintOptional("TalentSwap: loadout update finished; confirm in the talent UI if needed.")
+    TalentSwapper.Feedback.PrintOptional("TalentSwapper: loadout update finished; confirm in the talent UI if needed.")
   end
 end
 
 local function onConfigCommitFailed()
-  if not TalentSwap.pendingSwap then
+  if not TalentSwapper.pendingSwap then
     return
   end
-  local pending = TalentSwap.pendingSwap
-  TalentSwap.pendingSwap = nil
-  TalentSwap.Feedback.OnSwapFailed(pending.name, "commit_failed")
+  local pending = TalentSwapper.pendingSwap
+  TalentSwapper.pendingSwap = nil
+  TalentSwapper.Feedback.OnSwapFailed(pending.name, "commit_failed")
 end
 
 local function onActiveTalentGroupChanged()
-  if TalentSwap.UI and TalentSwap.UI.RefreshIfVisible then
-    TalentSwap.UI:RefreshIfVisible()
+  if TalentSwapper.UI and TalentSwapper.UI.RefreshIfVisible then
+    TalentSwapper.UI:RefreshIfVisible()
   end
 end
 
@@ -125,13 +131,13 @@ eventFrame:SetScript("OnEvent", function(_, event, ...)
   end
 end)
 
-function TalentSwap:SetPendingSwap(configID, displayName)
+function TalentSwapper:SetPendingSwap(configID, displayName)
   self.pendingSwap = {
     configID = configID,
     name = displayName,
   }
 end
 
-function TalentSwap:ClearPendingSwap()
+function TalentSwapper:ClearPendingSwap()
   self.pendingSwap = nil
 end
