@@ -1,0 +1,13 @@
+## Interface: 120001
+## Title: TalentSwap
+## Notes: Keybinds and quick swap for talent loadouts (Midnight 12.0+)
+## Author: TalentSwap
+## Version: 1.0.0
+## SavedVariablesPerCharacter: TalentSwapDB
+# Bindings.xml must NOT be listed here — the client loads it automatically from this folder.
+
+Core.lua
+TalentAPI.lua
+Feedback.lua
+SlotManager.lua
+UI.lua
