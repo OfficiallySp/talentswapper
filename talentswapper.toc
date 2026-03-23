@@ -1,7 +1,7 @@
 ## Interface: 120001
 ## Title: TalentSwapper
 ## Notes: Keybinds and quick swap for talent loadouts
-## Author: TalentSwapper
+## Author: OfficiallySp
 ## Version: 1.0.0
 ## SavedVariablesPerCharacter: TalentSwapperDB
 
