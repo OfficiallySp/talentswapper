@@ -18,11 +18,6 @@ BINDING_NAME_TALENTSWAP_SLOT2 = "Talent loadout slot 2"
 BINDING_NAME_TALENTSWAP_SLOT3 = "Talent loadout slot 3"
 BINDING_NAME_TALENTSWAP_SLOT4 = "Talent loadout slot 4"
 BINDING_NAME_TALENTSWAP_SLOT5 = "Talent loadout slot 5"
-BINDING_NAME_TALENTSWAP_SLOT6 = "Talent loadout slot 6"
-BINDING_NAME_TALENTSWAP_SLOT7 = "Talent loadout slot 7"
-BINDING_NAME_TALENTSWAP_SLOT8 = "Talent loadout slot 8"
-BINDING_NAME_TALENTSWAP_SLOT9 = "Talent loadout slot 9"
-BINDING_NAME_TALENTSWAP_SLOT10 = "Talent loadout slot 10"
 
 --- Pending swap after LoadInProgress (cast bar)
 TalentSwap.pendingSwap = nil
